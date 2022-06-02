@@ -105,11 +105,12 @@ end
 #     2-dimensional array: [['some data']]
 #     3-dimensional array: [[['some data']]]
 def flatten(data)
-    if data.is_a?(Array)
-        arr_idx = data.index { |el| el.is_a?(Array) }
-        return data unless arr_idx
-        flatten([*data[0...arr_idx], *data[arr_idx], *data[arr_idx + 1..-1]])
-    else
-        [data]
+    return [data] unless data.is_a?(Array)
+    data.inject([]) do |acc, el|
+        if el.is_a?(Array)
+            acc += flatten(el)
+        else
+            acc << el
+        end
     end
 end
